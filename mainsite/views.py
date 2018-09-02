@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.template.loader import get_template
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from datetime import datetime
 from .models import Post
@@ -33,3 +33,13 @@ def homepage(request):
 #         print(post_lists)
 #         post_lists.append("<samll>"+str(post.body)+"</small><br><br>")   # 标签呈现小号字体效果、换行效果
 #     return HttpResponse(post_lists)
+
+def showpost(request, slug):
+    template = get_template('post.html')
+    try:
+        post = Post.objects.get(slug=slug)
+        if post != None:
+            html = template.render(locals())
+            return HttpResponse(html)
+    except:
+        return redirect('/')
